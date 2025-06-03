@@ -2,8 +2,7 @@
 
 This repository is a starter template for building a Next.js application with Turso.
 
-![Next.js Turso Starter](https://github.com/user-attachments/assets/99eeeed7-bf9f-41b9-ae4c-25612b8888cc)
-
+<img width="1200" alt="Next.js Starter" src="https://github.com/user-attachments/assets/b78fd54e-574b-43b9-8f8f-943d14722e64" />
 
 ## Features
 
