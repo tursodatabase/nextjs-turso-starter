@@ -1,65 +1,38 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { Todo } from "@/db/schema";
-import { getDatabaseClient } from "@/app/utils";
+import { eq, not } from "drizzle-orm";
 
-export type TodoItem = {
-  id: number;
-  description: string;
-};
+import { db } from "@/db";
+import { todosTable } from "@/db/schema";
 
 export async function addTodo(formData: FormData) {
-  const client = await getDatabaseClient();
-
   const description = formData.get("description") as string;
 
-  if (!client) return null;
-
-  await client.execute({
-    sql: "INSERT INTO todos (description) VALUES (?)",
-    args: [description]
+  await db.insert(todosTable).values({
+    description,
   });
 
   revalidatePath("/");
 }
 
 export async function removeTodoAction(id: number) {
-  const client = await getDatabaseClient();
-
-  if (!client) return null;
-
-  await client.execute({
-    sql: "DELETE FROM todos WHERE id = ?",
-    args: [id]
-  });
+  await db.delete(todosTable).where(eq(todosTable.id, id));
 
   revalidatePath("/");
 }
 
 export async function toggleTodoAction(id: number) {
-  const client = await getDatabaseClient();
-
-  if (!client) return null;
-
-  await client.execute({
-    sql: "UPDATE todos SET completed = NOT completed WHERE id = ?",
-    args: [id]
-  });
+  await db
+    .update(todosTable)
+    .set({
+      completed: not(todosTable.completed),
+    })
+    .where(eq(todosTable.id, id));
 
   revalidatePath("/");
 }
 
-export async function getTodos(): Promise<Todo[]> {
-  const client = await getDatabaseClient();
-
-  if (!client) return [];
-
-  const result = await client.execute("SELECT * FROM todos");
-  
-  return result.rows.map(row => ({
-    id: row.id as number,
-    description: row.description as string,
-    completed: Boolean(row.completed)
-  }));
+export async function getTodos() {
+  return await db.select().from(todosTable);
 }

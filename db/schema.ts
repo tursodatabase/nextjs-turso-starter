@@ -1,13 +1,7 @@
-export interface Todo {
-  id: number;
-  description: string;
-  completed: boolean;
-}
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
-export const TODO_TABLE_SQL = `
-CREATE TABLE IF NOT EXISTS todos (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  description TEXT NOT NULL,
-  completed BOOLEAN NOT NULL DEFAULT 0
-)
-`;
+export const todosTable = sqliteTable("todos", {
+  id: integer().primaryKey({ autoIncrement: true }),
+  description: text().notNull(),
+  completed: integer({ mode: "boolean" }).notNull().default(false),
+});

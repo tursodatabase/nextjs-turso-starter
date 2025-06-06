@@ -6,10 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.7",
+    "@libsql/client": "^0.15.8",
+    "drizzle-kit": "^0.31.1",
+    "drizzle-orm": "^0.44.2",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-confetti": "^6.4.0",

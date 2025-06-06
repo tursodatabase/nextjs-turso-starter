@@ -1,9 +1,13 @@
 "use client";
 
 import { useOptimistic } from "react";
-import type { Todo } from "@/db/schema";
+import { InferSelectModel } from "drizzle-orm";
+
+import { todosTable } from "@/db/schema";
 import { Todo as TodoComponent } from "./todo";
 import { Form } from "./form";
+
+type Todo = InferSelectModel<typeof todosTable>;
 
 export function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
   const [optimisticTodos] = useOptimistic<

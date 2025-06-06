@@ -2,7 +2,9 @@
 
 import { useTransition, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import type { Todo as TodoType } from "@/db/schema";
+import { InferSelectModel } from "drizzle-orm";
+
+import { todosTable } from "@/db/schema";
 import { removeTodoAction, toggleTodoAction } from "./actions";
 
 // Dynamically import react-confetti to avoid SSR issues
@@ -10,11 +12,7 @@ const ReactConfetti = dynamic(() => import("react-confetti"), {
   ssr: false,
 });
 
-export function Todo({
-  item,
-}: {
-  item: TodoType;
-}) {
+export function Todo({ item }: { item: InferSelectModel<typeof todosTable> }) {
   const [isPending, startTransition] = useTransition();
   const [showConfetti, setShowConfetti] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
@@ -65,8 +63,8 @@ export function Todo({
         />
       )}
       <div className="flex w-full items-center space-x-3">
-        <button 
-          className="p-1 text-3xl" 
+        <button
+          className="p-1 text-3xl"
           onClick={handleToggle}
           disabled={isPending}
         >
